@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <pwd.h>
 
 #define PORT 80
 int main(int argc, char const *argv[])
@@ -57,9 +58,48 @@ int main(int argc, char const *argv[])
         perror("accept");
         exit(EXIT_FAILURE);
     }
-    valread = read( new_socket , buffer, 1024);
-    printf("%s\n",buffer );
-    send(new_socket , hello , strlen(hello) , 0 );
-    printf("Hello message sent\n");
+
+    pid_t p_id=fork();
+    struct passwd * nobodyInfo;
+    int status = 0;
+
+    printf("p_id: %d\n", p_id);
+
+    if(p_id < 0){
+        perror("fork failed!\n");
+        exit(EXIT_FAILURE);
+    }
+    else if(p_id == 0){
+
+        //getting the userID for the nobody user
+
+        nobodyInfo = getpwnam("nobody");
+        // printf("nobody id: %d", nobodyInfo->pw_uid);
+
+        if(setuid(nobodyInfo->pw_uid) == -1){
+
+            perror("privilege drop failed!\n");
+            exit(EXIT_FAILURE);
+
+        }
+        else{
+            printf("privilege drop success\n");
+
+            valread = read( new_socket , buffer, 1024);
+            printf("%s\n",buffer );
+            send(new_socket , hello , strlen(hello) , 0 );
+            printf("Hello message sent\n");
+        }
+
+
+    }
+    else{
+        printf("waiting for child to exit\n");
+        waitpid(p_id, &status, 0);
+        exit(0);
+        printf("child process exited\n");
+    }
+
+
     return 0;
 }
