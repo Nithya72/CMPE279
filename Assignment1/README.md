@@ -1,8 +1,4 @@
-# CMPE279
-
-Software Security Technologies - Assignment1 submission 
-
-Student: Nithya Anbalagan (014608321)
+# CMPE279 - Assignment 1
 
 
 #### The following changes were made in the client and server files to run on mac terminal
