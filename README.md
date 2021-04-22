@@ -4,7 +4,7 @@ Course Name: Software Security Technologies (Spring 2021) <br>
 Student Name: Nithya Anbalagan  <br>
 Student Id: 014608321  <br>
 
-## Assignment 1
+## Assignment 1 and Assignment 2
 
 
 #### The following changes were made in the client and server files to run on mac terminal
@@ -23,8 +23,8 @@ removed (SO_REUSEPORT)
 #### Steps used to run the files:
 
 #### Server terminal: 
-1) sudo gcc server.c
-2) sudo ./a.out
+1) sudo gcc server.c -o server
+2) sudo ./server
 
 #### Client terminal: 
 1) gcc client.c -o client
