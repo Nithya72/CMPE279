@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
 
     // if(argc > 1){
     if(strcmp(argv[0], "CHILD") == 0){
-        printf("re-exec() child process \n");
+        printf("new exec'ed child process \n");
         int new_socket_no = atoi(argv[1]);
         goto_method(new_socket_no);
     }
