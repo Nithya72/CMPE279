@@ -22,14 +22,16 @@ int main(int argc, char const *argv[])
     char buffer[1024] = {0};
     char *hello = "Hello from server";
 
+
     printf("execve=0x%p\n", execve);
 
-    if(argc > 1){
+    // if(argc > 1){
+    if(strcmp(argv[0], "CHILD") == 0){
         printf("re-exec() child process \n");
         int new_socket_no = atoi(argv[1]);
         goto_method(new_socket_no);
     }
-    else if(argc == 1){
+    else{
 
         // Creating socket file descriptor
         if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -94,14 +96,12 @@ int main(int argc, char const *argv[])
             }
 
             printf("privilege drop success\n");
+
             char fd_string[10];
+            snprintf(fd_string,10,"%d",new_socket);            
+            char *argv1[] = {"CHILD", fd_string, NULL};
 
-            snprintf(fd_string,10,"%d",server_fd);            
-
-            char *argv1[] = {"./server", fd_string, NULL};
-
-            int exec_status = execv("./server", argv1);
-
+            int exec_status = execvp("./server", argv1);
             if(exec_status<0){
                 perror("child re-exec failed!\n");
                 exit(EXIT_FAILURE);
